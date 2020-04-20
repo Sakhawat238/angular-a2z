@@ -1,0 +1,47 @@
+@font-face {
+    font-family: 'Montserrat';
+    src: local('Montserrat Regular'), local('Montserrat-Regular'), url('../fonts/Montserrat-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Regular'), local('Lato-Regular'), url('../fonts/Lato-Regular.ttf') format('truetype');
+}
+html {
+    font-size: 15px;
+}
+body {
+    margin: 0;
+}
+
+html{box-sizing:border-box;-ms-overflow-style:scrollbar}*,::after,::before{box-sizing:inherit}.container{width:100%;padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}@media (min-width:576px){.container{max-width:540px}}@media (min-width:768px){.container{max-width:720px}}@media (min-width:992px){.container{max-width:960px}}@media (min-width:1200px){.container{max-width:1140px}}.container-fluid{width:100%;padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}
+h2 {
+    font-family: 'Montserrat';
+}
+p {
+    font-family: 'Lato';
+}
+main {
+    background: url('../images/fabric_1.png') repeat;
+    padding-top: 3rem;
+    padding-left: 5rem !important;
+    padding-right: 5rem !important;
+    padding-bottom: 3rem;
+    letter-spacing: 0.4px;
+}
+ul, li {
+    list-style: none;
+}
+pre {
+    font-size: 13px;
+}
+@media (max-width:992px){
+    pre {
+        overflow-x: scroll;
+    }
+}
+p {
+    margin: .2rem;
+}
+span {
+    color: blue;
+}

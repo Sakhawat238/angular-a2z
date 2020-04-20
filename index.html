@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Angular A2Z</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="container">
+    <section>
+      <h2>Set Up</h2>  
+      <pre>
+        npm install -g @angular/cli@latest
+        ng new app-name
+        cd app-name
+        ng serve
+      </pre> 
+    </section>
+    <section>
+      <h2>Adding Module</h2>
+      <p>If we want to add any module in our application, we have to include it in our app.module.ts file.</p>
+      <pre>
+        import { module-name } from 'source-name'
+        @NgModule({
+          ......,
+          imports:[
+            ......,
+            module-name
+          ],
+          ....
+        })
+      </pre>
+    </section>
+    <section>
+      <h2>Kick Start</h2>
+      <p>In 'main.ts' file we define which module to start first.</p>
+      <pre>
+        platformBrowserDynamic().bootstrapModule(AppModule)
+      </pre>
+      <p>In 'app.module.ts' file we tell which component is the root compoenent.</p>
+      <pre>
+        @NgModule({
+          ......,
+          bootstrap:[AppComponent],
+          ....
+        })
+      </pre>
+      <p>In 'app.component.ts' file we define component selector tag.</p>
+      <p>Angular serves 'index.html' file which contains app component tag.</p>
+      </div>
+    </section>
+    <section>
+      <h2>Component</h2>
+      <p>Component selector is used to tell Angular to consider a class as a component.</p>
+      <p>It contains all necessary information regarding that component.</p>
+      <pre>
+        @Component({
+          selector: 'tag-name',  ##used in html code to represent this component
+          templateUrl: 'html-file-path',
+          styleUrls: [...list of stylesheet files]
+        })
+      </pre>
+      <p>TemplateUrl or template is a required attribute. But we can skip selector, styleUrls etc.</p>
+      <p>To Register a component, add the component class name inside declaration array of NgModule decorator in app.module.ts file.</p>
+      <p>Component creation shortcut : <span>ng g c 'component-name'</span></p>
+      <p>Three ways to use component selector :</p>
+      <p>1. We declare selector: 'tag-name' and use it as, <span>&lt;tag-name&gt;&lt;/tag-name&gt;</span></p>
+      <p>2. We declare selector: '[tag-name]' and use it as attribute, <span>&lt;div tag-name&gt;&lt;/div&gt;</span></p>
+      <p>3. We declare selector: '.tag-name' and use it as class, <span>&lt;div class="tag-name"&gt;&lt;/div&gt;</span></p>
+      </div>
+    </section>
+    <section>
+      <h2>String Interpolation</h2>
+      <p>String interpolation: <span>{{data}}</span></p>
+      <p>Here data can be anything as long as it generates a string.</p>
+      <p>So data can be variable from .ts file, or function or expression.</p>
+      <p>But we cannot write multi line expression here.</p>
+      <p>We can not use if else block; but we can use ternary expression.</p>
+      </div>
+    </section>
+    <section>
+      <h2>Property Binding</h2>
+      <p>Property binding: <span>[property]="data"</span></p>
+      <p>Here data can be anything as long as it generates a proper value for that property.</p>
+      <p>We can sometimes replace string interpolation with property binding, for example:</p>
+      <p>In .ts file,</p>
+      <pre>
+        title = 'Hello World!';
+      </pre>
+      <p>In .html file,</p>
+      <pre>
+        &lt;p&gt;{{title}}&lt;/p&gt;
+        &lt;p [innerText]="title"&gt;&lt;/p&gt;
+      </pre>
+      </div>
+    </section>
+    <section>
+      <h2>Event Binding</h2>
+      <p>Event binding: <span>(event)="expression"</span></p>
+      <pre>
+        (click)="addNewUser()"
+        (input)="updateUsername($event)"  ## Here $event refers to the value that input event emits
+      </pre>
+      </div>
+    </section>
+    <section>
+      <h2>Two way Binding</h2>
+      <p>Two way binding: <span>[(ngModel)]="data"</span></p>
+      <pre>
+        username = "";                              ## In .ts file
+        &lt;input type="text" [(ngModel)]="username"&gt;  ## In .html file
+      </pre>
+      <p>Now if input changes, value of username will change too. Also if value of username changes, value of input field will change too.</p>
+      </div>
+    </section>
+    <section>
+      <h2>Directive</h2>
+      <p>Directives are instructions in the DOM.</p>
+      <p>Components are kind of such instructions in the DOM.</p>
+      <p>Once we place the selector of our component somewhere in our templates, we're in
+        structing Angular to add the content of our component template and the business logic in our TypeScript code in this place where we use the selector.
+      </p>
+      <p>Indeed components are directives but directives with a template, there are also directives without a template.</p>
+      <p>For example, <span>*ngIf</span> is a structural directive that changes the structure of the dom.</p>
+      <p><span>ngStyle</span>, <span>ngClass</span> are attribute directives, without a * before. They just modify element.</p>
+      <p>Some directive take static value like true or false whereas some take js object.</p>
+      </div>
+    </section>
+    <section>
+      <h2>ngStyle</h2>
+      <pre>
+        &lt;p [ngStyle]="{backgroundColor: getColor()}"&gt;Hello World&lt;/p&gt;
+        &lt;p [ngStyle]="{'background-color': status == true ? 'green' : 'red'}"&gt;Hello World&lt;/p&gt;
+      </pre>
+      <p>So it works like a attribute, thus we can use property binding on it.</p>
+      <p>It allows us to dynamically add or remove css styles.</p>
+      <p>It takes an object; key value pair, where key is a css property, value can be anything.</p>
+      </div>
+    </section>
+    <section>
+      <h2>ngClass</h2>
+      <pre>
+        &lt;p [ngClass]="{'active': getStatus()}"&gt;Hello World&lt;/p&gt;
+      </pre>
+      <p>So it works like a attribute, thus we can use property binding on it.</p>
+      <p>It allows us to dynamically add or remove css class.</p>
+      <p>It takes an object; key value pair, where key is a class name, value can be anything that returns true or false.</p>
+      </div>
+    </section>
+    <section>
+      <h2>If Else</h2>
+      <pre>
+        &lt;p *ngIf="isVisible; else elseblock">You are visible now&lt;/p&gt;
+        &lt;ng-template #elseblock&gt;
+          &lt;p&gt;You are invisible&lt;/p&gt;
+        &lt;/ng-template&gt;
+      </pre>
+      </div>
+    </section>
+    <section>
+      <h2>For Loop</h2>
+      <pre>
+        &lt;p *ngFor="let item of items, let i = index"&gt;{{i}}. Hi {{item}}&lt;/p&gt;
+      </pre>
+      </div>
+    </section>
+    <section>
+      <h2>Switch Case</h2>
+      <pre>
+        &lt;div [ngSwitch]="value"&gt;
+          &lt;p *ngSwitchCase="1"&gt;Value is 1&lt;/p&gt;
+          &lt;p *ngSwitchCase="2"&gt;Value is 2&lt;/p&gt;
+          &lt;p *ngSwitchCase="3"&gt;Value is 3&lt;/p&gt;
+          &lt;p *ngSwitchDefault&gt;Value is default&lt;/p&gt;
+        &lt;/div&gt;
+      </pre>
+      </div>
+    </section>
+    <section>
+      <h2>Passing data to child component</h2>
+      <p>We will use property binding.</p>
+      <p>We will use <span>Input()</span> decorator.</p>
+      <p>In parent.ts file,</p>
+      <pre>
+        serverElements = [{os:'linux', version:'ubuntu'}, {os:'windows', version:'10'}]
+      </pre>
+      <p>In parent.html file,</p>
+      <pre>
+        &lt;app-child *ngFor="se of serverElements" [server]="se"&gt;&lt;/app-child&gt;
+      </pre>
+      <p>In child.ts file,</p>
+      <pre>
+        @Input() server : {os:string, version:string};
+      </pre>
+      <p>In child.html file,</p>
+      <pre>
+        &lt;p&gt;{{server.os}} {{server.version}}&lt;/p&gt;
+      </pre>
+      <p>We can bind throuh alias, instead of using direct property name.</p>
+      <pre>
+        @Input("alias name"), then in parent html file ["alias name"]="data".
+      </pre>
+      </div>
+    </section>
+    <section>
+      <h2>Listening event from child component</h2>
+      <p>We will use event binding.</p>
+      <p>We will use <span>EventEmitter&lt;&gt;()</span> class and <span>Output()</span> decorator.</p>
+      <p>In child.html file,</p>
+      <pre>
+        &lt;button (click)="onAddServer()"&gt;&lt;/button&gt;
+      </pre>
+      <p>In child.ts file,</p>
+      <pre>
+        serverOS = ''     ## Two way binded with input field
+        serverVersion = ' '     ## Two way binded with input field
+        @Output() serverAdded = new EventEmitter&lt;{os: string, version:string}&gt;()
+        onAddServer(){
+          this.serverAdded.emit({os: serverOS, version: serverVersion})
+        }
+      </pre>
+      <p>In parent.html file,</p>
+      <pre>
+        &lt;app-child (serverAdded)="onServerAdded($event)"&gt;&lt;/app-child&gt;
+      </pre>
+      <p>In parent.ts file,</p>
+      <pre>
+        onServerAdded(serverdata:{os: string, version:string}){
+          do something
+        }
+      </pre>
+      <p>We can bind throuh alias, instead of using direct event name.</p>
+      <pre>
+        @Output("alias name"), then in parent html file ("alias name")="data".
+      </pre>
+      </div>
+    </section>
+    <section>
+      <h2>Style Encapsulation</h2>
+      <p>Lets say, parent component has a style, p{color:blue}.</p>
+      <p>Now this style will only apply to the components that are inside app component html file.</p>
+      <p>It wont apply to any of its child component, though they are inside app component.</p>
+      <p>This is called view encapsulation.</p>
+      <p>Angular does that by assiging each element inside the component a unique and same attribute.</p>
+      <p>Then Angular changed the above style to, p[attribute_name]{color:blue}</p>
+      <p>We can override this behavior by adding a property in component decorator.</p>
+      <pre>
+        @Component({
+          .........
+          encapsulation: ViewEncasulation.None  ## Disable adding attribute, thus no encapsulation.
+          encapsulation: ViewEncasulation.Native ## Apply shadow dom technique if browser supports.
+          encapsulation: ViewEncasulation.Emulated ## Default, encapsulation enabled.
+        })
+      </pre>
+      </div>
+    </section>
+    <section>
+      <h2>Template Reference</h2>
+      <p>In general, we two way bind input field with typescript variable, so that we can capture user input.</p>
+      <p>But this process update variable for every input change.</p>
+      <p>Instead of updating varible for every input, we can use template reference to get input data when needed.</p>
+      <p>In html file,</p>
+      <pre>
+        &lt;input type="text" #nameInput&gt;  ## We are adding a reference to this input field.
+        &lt;button (click)="onAddName(nameInput)"&gt;&lt;/button&gt;
+      </pre>
+      <p>We can directly use this reference in html file only, not in ts file.</p>
+      <p>So we pass this as an argument of onAddName() method to use it inside ts file.</p>
+      <p>Here #nameInput refers to the whole input element.</p>
+      <p>In ts file,</p>
+      <pre>
+        onAddName(inputdata : HTMLInputElement){
+          console.log(inputdata.value)  ## We can use this value now.
+        }
+      </pre>
+      <p>There is another way to access any html element from typescript without passing them through method.</p>
+      <p>In html file,</p>
+      <pre>
+        &lt;input type="text" #nameInput&gt;
+        &lt;button (click)="onAddName()"&gt;&lt;/button&gt;  ## We no longer pass the reference.
+      </pre>
+      <p>In ts file,</p>
+      <pre>
+        @ViewChild('nameInput',{static:true/false}) nameData : ElementRef
+        onAddName(){
+          console.log(this.nameData.nativeElement.value)
+        }
+      </pre>
+      <p>Here nameData refers to html element and to get that element, we use nativeElement property.</p>
+      <p>
+        { static: true } as a second argument needs to be applied to all usages of @ViewChild() (and also @ContentChild() discussed later)
+        if we plan on accessing the selected element inside of ngOnInit(). If we don't access the selected element in ngOnInit 
+        (but anywhere else in our component), we will set static: false instead! This is a temporary adjustment which will not be 
+        required anymore once Angular 9 is released!
+      </p>
+      </div>
+    </section>
+    <section>
+      <h2>Html Code Inject</h2>
+      <p>Let say we have a component named test component with selector &lt;app-test&gt;</p>
+      <p>Inside parent component,</p>
+      <pre>
+        &lt;app-test&gt;...Any html code or anything thing we write here would not be rendered by angular...&lt;/app-test&gt;
+      </pre>
+      <p>But we can use <span>ng-content</span> to render html.</p>
+      <p>Inside test component html file,</p>
+      <pre>
+        &lt;div&gt;
+          &lt;h1&gt;Hello world&lt;/h1&gt;
+          &lt;ng-content&gt;&lt;/ng-content&gt;
+        &lt;/div&gt;
+      </pre>
+      <p>Now whatever we write between &lt;app-test&gt; ... &lt;/app-test&gt; will replace &lt;ng-content&gt;&lt;/ng-content&gt;</p>
+      <p>Previously, We use @ViewChild() to access referenced element of a component's own template.</p>
+      <p>But if the html code is projected via ng-content, thus any refernce in that code can be access from parent compoent.</p>
+      <p>To access this reference from child component, we have to use <span>@ContentChild()</span>.</p>
+      <p>Inside parent component html file,</p>
+      <pre>
+        &lt;app-test&gt;&lt;p #demo&gt;Hello&lt;/p&gt;&lt;/app-test&gt;
+      </pre>
+      <p>In test component ts file,</p>
+      <pre>
+        @ContentChild('demo',{static:true/false}) demoref: ElementRef
+      </pre>
+      </div>
+    </section>
+    <section>
+      <h2>Component Lifecycle</h2>
+      <p><span>Constructor</span>: called first.</p>
+      <p>
+        <span>ngOnChanges</span>: can be executed multiple times; executed right at the start when new component is created.
+        Also called whenever our bound input property changes, that means @Input() decorated property receives new value. 
+        Only method that receives argument: ngOnChanges(changes: SimpleChanges).
+      </p>
+      <p><span>ngOninit</span>: executed once the component is initialized but not displayed yet.</p>
+      <p>
+        <span>ngDoCheck</span>: can be executed multiple times; called during every change detection run. 
+        Angular check the dom for various reason, and everytime angular check, this method will also run.
+      </p>
+      <p><span>ngAfterContentInit</span>: called after ng-content has been projected into view.</p>
+      <p><span>ngAfterContentChecked</span>: called everytime the projected content has been checked.</p>
+      <p>
+        <span>ngAfterViewInit</span>: called after the component's view (and child views) has been initialized. Now 
+        we can access template and reference template element.
+      </p>
+      <p><span>ngAfterViewChecked</span>: called every time the component's view (and child views) has been checked.</p>
+      <p><span>ngOnDestroy</span>: called once the component is about to destroy.</p>
+      </div>
+    </section>
+    <section>
+      <h2>Directive Advanced</h2>
+      <p>Mainly two types: Attribute and Structural.</p>
+      <p>Can not have more than one structural directive in the same element.</p>
+      <p>So we can not use *ngIf and *ngFor together on same element, But we can use structural and attribute (multiple) directive together.</p>
+      <p>We can create custom directive. For example,</p>
+      <p>In demo.directive.ts file,</p>
+      <pre>
+        @Directive({
+          selector: '[appDemo]'  ## Here we are using attribute styled selector and camel case format.
+        })
+        export class DemoDirective implements OnInit {
+          constructor(private elementRef: ElementRef){}  ## Here elementRef refers to the element where our directive has been placed on.
+          ngOnInit(){
+            this.elementRef.nativeElement.backgroundColor = 'White'; 
+          }
+        }
+      </pre>
+      <p>Then in app.module.ts file we add,</p>
+      <pre>
+        @NgModule({
+          declarations : [....., DemoDirective,...]
+        })
+      </pre>
+      <p>Now we can use it on any component or element, like this,</p>
+      <pre>
+        &lt;p appDemo&gt;This is styled by demo directive&lt;/p&gt;
+      </pre>
+      <p>But accessing and then directly modifying element via ElementRef is not a good practice.</p>
+      <p>Rather we can use <span>Renderer2</span>.</p>
+      <pre>
+        constructor(private elementRef: ElementRef, private renderer: Renderer2){}
+        ngOnInit(){
+          this.renderer.setStyle(this.elementRef.nativeElement, 'background-color', 'green', 'optional-fourth-argument');
+        }
+      </pre>
+      <p>We can also listen event from the element and write logics on directive based on the events.</p>
+      <pre>
+        @HostListener('mouseenter') mouseover(evendata: Event) {
+          this.renderer.setStyle(this.elementRef.nativeElement, 'background-color', 'green', 'optional-fourth-argument');
+        }
+      </pre>
+      <p>
+        Here mouseenter is a html event and when mouse enter on host element, this event emits. Directive listen to this event 
+        and call mouseover method, thus changing host element background style.
+      </p>
+      <p>There is a shortcut to change host element style rather than using elementRef and renderer.</p>
+      <pre>
+        @HostBinding('style.backgroundColor') bgColor : String;
+        ngOnInit(){
+          this.bgColor = 'Red';
+        }
+      </pre>
+      <p>Using hostbinding we can access properties of the element.</p>
+      <p>Here we are defining background color by ourselves but we can make it dynamic.</p>
+      <p>We can use the concept of property binding.</p>
+      <p>In demo.directive.ts file,</p>
+      <pre>
+        @Input() color : String = 'red'
+        @HostBinding('style.backgroundColor') bgColor : String;
+        ngOnInit(){
+          this.bgColor = this.color;
+        }
+      </pre>
+      <p>In any component html file,</p>
+      <pre>
+        &lt;p appDemo [color]="'green'"&gt;This will be colored green&lt;/p&gt;
+      </pre>
+      <p>Here appDemo is the directive and color is it's property</p>
+      <p>Angular can determine which property comes from directive and which property comes from component itself.</p>
+      <p>Suppose, color is the only property of this decorator. Then we can alias it in directive selector name.</p>
+      <pre>
+        @Input('appDemo') color : String = 'red'
+      </pre>
+      <p>Then in html file we can write,</p>
+      <pre>
+        &lt;p [appDemo]="green"&gt;This will be colored green&lt;/p&gt;
+      </pre>
+      <p>This is what happened with [ngClass] and [ngStyle] directive.</p>
+      <p>Lets discuss about structural directive.</p>
+      <p> We use * before structural directive but behind the scene it converts into something else.</p>
+      <pre>
+        &lt;div *ngIf=""&gt;....&lt;/div&gt;
+      </pre>
+      <p>But it converts to our familiar property binding.</p>
+      <pre>
+        &lt;ng-template [ngIf]=""&gt;
+          &lt;div&gt;...&lt;/div&gt;
+        &lt;/ng-template&gt;
+      </pre>
+      <p>Lets create a structural directive that works exactly opposite of ngIf.</p>
+      <pre>
+        @Directive({
+          selector: 'appUnless'
+        })
+        @Input('appUnless') set unless(condition: boolean) {
+          if(!condition) {
+            this.vcRef.createEmbeddedView(this.templateRef);
+          } else {
+            this.vcRef.clear();
+          }
+        }
+        ## This a shortcut. Here unless is a property and we define a setter for it.
+        ## Thus when unless propety changes from outside, the above method will be called.
+        constructor(private templateRef: TemplateRef&lt;any&gt;, private vcRef: ViewContainerRef){
+          ## Here we use TemplateRef to get refernce of ng-template; This is 'what' we will render.
+          ## We use ViewContainerRef to get refernce to 'where' we will render it.
+        }
+      </pre>
+      <p>Now in component file,</p>
+      <pre>
+        &lt;div *appunless=""&gt;....&lt;/div&gt;
+      </pre>
+      <p>Shortcut for creating directive: <span>ng g d 'name'</span></p>
+      </div>
+    </section>
+    <section>
+      <h2>Service</h2>
+      <p>Simple typescript class without any decorator like @Component() or @Directive().</p>
+      <p>Holds some fucntionallity and methods that will be used in various components.</p>
+      <p>In demo.service.ts,</p>
+      <pre>
+        export class DemoService {
+          doSomething(arg){
+            console.log(arg);
+          }
+        }
+      </pre>
+      <p>In general, we can simply import the class, create an instance and call the methods.</p>
+      <p>For example, In any.component.ts file,</p>
+      <pre>
+        import { DemoService } from ......
+        ds = new DemoService();
+        ds.doSomething("hi");
+      </pre>
+      <p>But thats not the best practice. Rather we let Angular create the instance for us.</p>
+      <p>In any.component.ts file,</p>
+      <pre>
+        constructor(private ds : DemoService){}
+        this.ds.doSomething("hi");
+      </pre>
+      <p>
+        Here, by adding a variable with type Demoservice in the constructor, we tell Angular to provide 
+        us an instance of Demoservice when Angular creates the component.
+      </p>
+      <p>But that alone is not enough. Because now Angular knows what you need but it does not know how to
+        get it. So we have to add the following line inside @Component() decorator.</p>
+      <pre>
+        @Component({
+          .....
+          providers: [DemoService]
+        })
+      </pre>
+      <p>This tells Angular who will provide the instance.</p>
+      <p>Lets say we have two components from two different component tree.</p>
+      <p>If we use a service in both of them in the above method, Angular will provide two different instance for them.</p>
+      <p>Now if the service has some data storage like array or variables, updating them in one of the component's service won't affect the other. </p>
+      <p>This behavior of Angular is called Hierarchial Injector.</p>
+      <p>
+        If we inject a service in a component, that component and all of its children will receive the exact 
+        same instance of that service. Any other component will not have any access to that instance of the service.
+      </p>
+      <p>So we can inject a service in the AppModule to make one common instance accessible for every components and services in the app.</p>
+      <p>Lets say, app component has two child components: abc & xyz.</p>
+      <p>To provide same instance of DemoService to both of them, we add DemoService in the providers array of app component.</p>
+      <p>
+        Then in abc and xyz component we no longer add this service in their providers array. If we do, then Angular will
+        create seperate instance for each of these components.
+      </p>
+      <p>But we have to declare a variable of DemoService in constructor of both of them like before.</p>
+      <p>We can inject a service into another service and the procedure is almost same as before.</p>
+      <p>But service doesnot have any metadata (stored in decorators i.e @Component()) like component and directive does.</p>
+      <p>So we have to add <span>@Injectable()</span> on top of the second service class where we are injecting the first service.</p>
+      <pre>
+        @Injectable()
+        export class DemoService2 (){
+          constructor(private ds:DemoService){}
+        }
+      </pre>
+      <p>We can also provide application-wide services in a different way.</p>
+      <p>Instead of adding a service class to the providers[] array in AppModule, we can set the following config in the service itself,</p>
+      <pre>
+        @Injectable({providedIn: 'root'})
+        export class MyService { ... }
+      </pre>
+      <p>Using this new syntax is completely optional, the traditional syntax (using providers[] ) will still work.</p>
+      <p>
+        The "new syntax" does offer one advantage though: Services can be loaded lazily by Angular (behind the scenes) 
+        and redundant code can be removed automatically.
+      </p>
+    </div>
+    </section>
+    <section>
+      <h2></h2>
+      <p></p>
+      <pre></pre>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
