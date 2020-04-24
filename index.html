@@ -541,6 +541,549 @@
     </div>
     </section>
     <section>
+      <h2>Routing</h2>
+      <p>Suppose, app comonent has tree child component: home, student, teacher.</p>
+      <p>In app.component.html file,</p>
+      <pre>
+        &lt;div&gt;
+          &lt;li class="active"&gt;&lt;a href="#"&gt;Home&lt;/a&gt;
+          &lt;li&gt;&lt;a href="#"&gt;Student&lt;/a&gt;
+          &lt;li&gt;&lt;a href="#"&gt;Teacher&lt;/a&gt;
+        &lt;/div&gt;
+        &lt;app-home&gt;&lt;/app-home&gt;
+        &lt;app-student&gt;&lt;/app-student&gt;
+        &lt;app-teacher&gt;&lt;/app-teacher&gt;
+      </pre>
+      <p>
+        Here these components are shown together but we want to show them individually whenever we click corresponding
+        link. We can solve this using routing.
+      </p>
+      <p>In app.module.ts file,</p>
+      <pre>
+        import { Routers, RouterModule } from '@angular/router';
+        const appRoutes : Route = [
+          { path: '', component: HomeComponent },
+          { path: 'students', component: StudentComponent },
+          { path: 'teachers', component: TeacherComponent }
+        ]
+        @NgModule({
+          imports: [
+            ......
+            RouterModule.forRoot(appRoutes)
+          ]
+        })
+      </pre>
+      <p>Now in app.component.html file,</p>
+      <pre>
+        &lt;div&gt;
+          &lt;li class="active"&gt;&lt;a href="#"&gt;Home&lt;/a&gt;
+          &lt;li&gt;&lt;a href="#"&gt;Student&lt;/a&gt;
+          &lt;li&gt;&lt;a href="#"&gt;Teacher&lt;/a&gt;
+        &lt;/div&gt;
+        &lt;router-outlet&gt;&lt;/router-outlet&gt;  ## router-outlet is a directive, not a component.
+      </pre>
+      <p>
+        Now we can visit each component individually by browsing their urls. But we still cannot change url by clicking the links yet. 
+        We can do the followings,
+      </p>
+      <pre>
+        &lt;div&gt;
+          &lt;li class="active"&gt;&lt;a href="/"&gt;Home&lt;/a&gt;
+          &lt;li&gt;&lt;a href="/students"&gt;Student&lt;/a&gt;
+          &lt;li&gt;&lt;a href="/teachers"&gt;Teacher&lt;/a&gt;
+        &lt;/div&gt;
+        &lt;router-outlet&gt;&lt;/router-outlet&gt;
+      </pre>
+      <p>
+        Now we can click on any link and it will take us to corresponding component. But this method is not ok because it will
+        reload/restart the whole app. Thus we may lose current state of the app and many other things. So this is not how we will
+        navigate in our app.
+      </p>
+      <p>Instead of using href we can use <span>routerLink</span></p>
+      <pre>
+        &lt;div&gt;
+          &lt;li class="active"&gt;&lt;a routerLink="/"&gt;Home&lt;/a&gt;
+          &lt;li&gt;&lt;a routerLink="/students"&gt;Student&lt;/a&gt;
+          &lt;li&gt;&lt;a [routerLink]="['/teachers']"&gt;Teacher&lt;/a&gt;  ## We can use property binding.
+        &lt;/div&gt;
+        &lt;router-outlet&gt;&lt;/router-outlet&gt;
+      </pre>
+      <p>
+        Note that, we have used '/' as a prefix in 'students' and 'teachers'. If we use 'students' instead of '/students', Angular will
+        treat it as a relative path. For example, if we have a button in student component with routerLink="students", then Angular will
+        think it as 'localhost:4200/students/students'. Similarly, './students' will generate same url. But we can use '../students' for
+        'localhost:4200/students'. That is, we go up one level, then add 'students' to url. Thus we can use '../../students' if needed.
+      </p>
+      <p>
+        Right now we get no visual indication of what the currently active route is. Home component selector has class="active" in it. 
+        It would be nice if we can add or remove this class on each element dynamically.
+      </p>
+      <p>
+        For that we will use <span>routerLinkActive</span> directive provided by Angular. It will apply any css class provided
+        by us to the element if it is currently the active element. 
+      </p>
+      <pre>
+        &lt;li routerLinkActive="active"&gt;&lt;a routerLink="/"&gt;Home&lt;/a&gt;
+        &lt;li routerLinkActive="active"&gt;&lt;a routerLink="/students"&gt;Student&lt;/a&gt;
+        &lt;li routerLinkActive="active"&gt;&lt;a [routerLink]="['/teachers']"&gt;Teacher&lt;/a&gt;
+      </pre>
+      <p>
+        Now whenever we click on a link, active class will be applied to it. But problem is, home component url is always
+        active becuase routerLinkActive matches paths and home compoent path '/' exists in all other compoent paths. SO we have to
+        check if path is exactly matched. So we can add special configurtaion on our routerLinkActive directive.
+      </p>
+      <pre>
+        &lt;li routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"&gt;&lt;a routerLink="/"&gt;Home&lt;/a&gt;
+        &lt;li routerLinkActive="active"&gt;&lt;a routerLink="/students"&gt;Student&lt;/a&gt;
+        &lt;li routerLinkActive="active"&gt;&lt;a [routerLink]="['/teachers']"&gt;Teacher&lt;/a&gt;
+      </pre>
+      <p>So far we have loaded route via link. But we can also navigate from a function</p>
+      <pre>
+        constructor(private router:Router){}
+        onLoadStudents(){
+          this.router.navigate(['/students']);
+        }
+      </pre>
+      <p>
+        Now if we use relative path inside navigate() i.e if we use 'students' instead of '/students', it will work same. Previously we
+        have used this approach and it would create this url, 'localhost:4200/students/students' but unlike the routerLink, navigate method 
+        does not know on which route we are currently on. So it will start from 'localhost:4200'. But we can tell it our current route
+        by passing a second argument inside navigate(). 
+      </p>
+      <pre>
+        constructor(private router:Router, private route:ActivatedRoute){}
+        onLoadUser(){
+          this.router.navigate(['/students'], {relativeTo:this.route});
+        }
+      </pre>
+      <p>We can add parameter to our routes to generate urls for dynamic components.</p>
+      <p>In app.module.ts file,</p>
+      <pre>
+        const appRoutes : Route = [
+          .......
+          { path: 'students/:id/:name', component: StudentDetailsComponent },
+          .......
+        ]
+      </pre>
+      <p>In studentdetails.component.ts file,</p>
+      <pre>
+        student : {id:number, name:string};
+        constructor(private route:ActivatedRoute){}
+        ngOnInit(){
+          this.student = {
+            id : this.route.snapshot.params['id'],  ## id will be a string, so we may need to convert it into number.
+            name : this.route.snapshot.params['name']
+          }; 
+        }
+      </pre>
+      <p>In studentdetails.component.html file,</p>
+      <pre>
+        {{ student.id}} {{ student.name }}
+      </pre>
+      <p>Now we can visit 'localhost:4200/students/1/john' from the browser. It will render StudentDetailsComponent with given id and name.</p>
+      <p>Lets add the following codes inside studentdetails.component.html file,</p>
+      <pre>
+        {{ student.id}} {{ student.name }}
+        &lt;a [routerLink]="['/students',2,'Alex']"&gt;Check Alex&lt;/a&gt;  ## localhost:4200/students/2/Alex
+      </pre>
+      <p>
+        If we click on 'Check Alex', we see that the url on the browser has changed to the one we have expected but the component did not change. 
+        This is not a bug, rather the default behavior of Angular. We are currently on StudentDetailsComponent and we are trying to visit StudentDetailsComponent
+        again. Thus Angular won't re-render the component. Though we are passing new data, Angular does not know that. To tell Angular to re-render
+        this component with new data, we add the following codes inside studentdetails.component.ts file,
+      </p>
+      <pre>
+        ngOnInit(){
+          this.student = {
+            id : +this.route.snapshot.params['id'],      ## add '+' to convert string to number.
+            name : this.route.snapshot.params['name']
+          }; 
+          ## route.params is an observable.
+          this.route.params.subscribe( (prms:Params) => {
+            this.student.id = +prms['id'];
+            this.student.name = prms['name'];
+          })
+        }
+      </pre>
+      <p>
+        We can also pass query parameters and fragments with our url (localhost:4200/teachers/2?age=55&nid=12345#editing) 
+        and somehow we have to retrieve these informations. To show how to do this, first we add another route in app.module.ts file,
+      </p>
+      <pre>
+        const appRoutes : Route = [
+          .......
+          { path: 'teachers/:id/edit', component:EditTeacherComponent },
+          .......
+        ]
+      </pre>
+      <p>Now in teacher.component.html file,</p>
+      <pre>
+        &lt;a 
+          [routerLink]="['/teachers', 2, 'edit']"  ## [routerLink]="['/teachers', teacher.id, 'edit']"
+          *ngFor="let teacher of teachers"
+        &gt;{{ teacher.name }}&lt;/a&gt;
+      </pre>
+      <p>
+        Suppose we want to add a query parameter 'allowEdit' which will determine the permission of editing. Instead of adding it inside the array,
+        we will use property binding.
+      </p>
+      <pre>
+        &lt;a 
+          [routerLink]="['/teachers', 2, 'edit']" 
+          [queryParams]="{ allowEdit:'1'}"  ## Not a directive, rather a property of routerLink directive.
+          *ngFor="let teacher of teachers"
+        &gt;{{ teacher.name }}&lt;/a&gt;
+      </pre>
+      <p>Clicking on the link will now generate the follwing url, localhost:4200/teachers/2/edit?allowEdit=1. We can also add fragment,</p>
+      <pre>
+        &lt;a 
+          [routerLink]="['/teachers', 2, 'edit']" 
+          [queryParams]="{ allowEdit:'1'}" 
+          [fragment]="'loading'"
+          *ngFor="let teacher of teachers"
+        &gt;{{ teacher.name }}&lt;/a&gt;
+      </pre>
+      <p>Now the generated url is, localhost:4200/teachers/2/edit?allowEdit=1#loading</p>
+      <p>We can also do the samething inside function.</p>
+      <pre>
+        constructor(private router:Router){}
+        onLoadTeacher(id:number){
+          this.router.navigate(['/teachers', id, 'edit'], {queryParams: {allowEdit:'1'}, fragment: 'loading'});
+        }
+      </pre>
+      <p>Now we will see how to retrieve this information.</p>
+      <pre>
+        constructor(route:ActivatedRoute){}
+        ngOnInit(){
+          console.log(this.route.snapshot.queryParams);
+          console.log(this.route.snapshot.fragment);
+        }
+      </pre>
+      <p>Now this approach will create the same re-rendering problem. So like params, we can also subscribe to queryParams and fragment.</p>
+      <pre>
+        constructor(route:ActivatedRoute){}
+        ngOnInit(){
+          .......
+          this.route.queryParams.subscribe();
+          this.route.fragment.subscribe();
+        }
+      </pre>
+      <p>Lets discuss about child routing. Suppose we have the following routes,</p>
+      <pre>
+        const appRoutes : Route = [
+          { path: '', component: HomeComponent },
+          { path: 'students', component: StudentComponent },
+          { path: 'students/:id', component: StudentDetailsComponent},
+          { path: 'students/:id/edit', component: EditStudentComponent},
+          { path: 'teachers', component: TeacherComponent },
+          { path: 'teachers/:id', component: TeacherDetailsComponent }
+        ]
+      </pre>
+      <p>We can rewrite these as follows,</p>
+      <pre>
+        const appRoutes : Route = [
+          { path: '', component: HomeComponent },
+          { path: 'students', component: StudentComponent, children: [
+            { path: ':id', component: StudentDetailsComponent},
+            { path: ':id/edit', component: EditStudentComponent}
+          ]},
+          { path: 'teachers', component: TeacherComponent, children: [
+            { path: ':id', component: TeacherDetailsComponent}
+          ]}
+        ]
+      </pre>
+      <p>
+        Now we can only render top level component inside router-outlet of app-component. So child routes of student component
+        need seperate router-outlet inside student component html file. 
+      </p>
+      <p>
+        Suppose we want to pass query params from one link to another. For example, student compnent has some query params in its url 
+        and we want these to carry forward to student edit component url. In that case, we configue as follows,
+      </p>
+      <pre>
+        constructor(private router:Router, private route:ActivatedRoute){}
+        onEditStudent(id:number){
+          this.router.navigate(['edit'], {relativeTo: this.route, queryParamsHandling: 'reserve/merge'});
+          ## reserve -> when we do not add any new query params.
+          ## merge -> when we add more new query params.
+        }
+      </pre>
+      <p>What will happen when someone tries to visit a page that doesnot exists? We may show 404 message or simply redirect them to another page.</p>
+      <p>Lets start with redirecting.</p> 
+      <pre>
+        const appRoutes : Route = [
+          .......
+          { path: 'not-found', component: PageNotFoundComponent },
+          { path: '**', redirectTo: '/not-found'}  ## wildcard routing; catch all unseen urls; so it must be last path in this array.
+        ]
+      </pre>
+      <p>In general if we have more than 2 or 3 routes, it is better to define them in a seperate module.</p>
+      <p>In app-routing.module.ts file,</p>
+      <pre>
+        const appRoutes : Route = [
+          { path: '', component: HomeComponent },
+          { path: 'students', component: StudentComponent, children: [
+            { path: ':id', component: StudentDetailsComponent},
+            { path: ':id/edit', component: EditStudentComponent}
+          ]},
+          { path: 'teachers', component: TeacherComponent, children: [
+            { path: ':id', component: TeacherDetailsComponent}
+          ]}
+        ]
+
+        @NgModule({
+          imports: [
+            RouterModule.forRoot(appRoutes)  ## We configured routermodule.
+          ],
+          exports: [
+            RouterModule    ## Now, we export it for app module.
+          ]
+        })
+        export class AppRoutingModule {
+        }
+      </pre>
+      <p>Now we simply add AppRoutingModule in the imports array of app module.</p>
+      <p>
+        Lets discuss about route guards: functionallity, logic, code which is executed when a route is loaded or when we leave a route. 
+        We may want to prevent a user from accessing certain routes. We can write code inside ngOnInit of each component but that is totally
+        inefficient. Rather we can use <span>canActivate</span> provided by Angular.
+      </p>
+      <p>Lets create a service which will works as a fake auth service. Inside auth.service.ts file,</p>
+      <pre>
+        export class AuthService {
+          loggedIn = false;
+
+          isAuthenticated() {
+            const promise = new Promise(
+              (resolve, reject) => {
+                setTimeout(() =>{              ## mimicking a server call which will take some time.
+                  resolve(this.loggedIn);
+                }, 8000)
+              }
+            );
+            return promise;
+          }
+
+          login() {
+            this.loggedIn = true;
+          }
+
+          logout() {
+            this.loggedIn = false;
+          }
+        }
+      </pre>
+      <p>Now we create a service named auth-guard. Inside auth-guard.service.ts file,</p>
+      <pre>
+        import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+        import { Observable } from 'rxjs/Observable';
+        import { Injectable } from '@angular/core';
+        import { AuthService } from './auth.service';
+
+        @Injectable()
+        export class AuthGuard implements CanActivate {
+          constructor(private authService: AuthService, private router: Router){}
+
+          canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): 
+            Observable&lt;boolean&gt; | Promise&lt;boolean&gt; | boolean {
+            return this.authService.isAuthenticated().then(
+              (authenticated: boolean) => {
+                if (authenticated) {
+                  return true;
+                } else {
+                  this.route.navigate(['/']);
+                }
+              }
+            );
+          }
+        }
+      </pre>
+      <p>Our guard is ready. Suppose we want to apply this guard in student component route. Inside app-rotuing.module.ts file,</p>
+      <pre>
+        const appRoutes : Route = [
+          .......
+          { path: 'students', canActivate: [AuthGuard],  component: StudentComponent, children: [
+            { path: ':id', component: StudentDetailsComponent},
+            { path: ':id/edit', component: EditStudentComponent}
+          ]}
+        ]
+      </pre>
+      <p>Here authguard will be applied to student component route and all of its child routes. We can add multiple guard.</p>
+      <p>
+        Suppose we want to access student component freely but put restriction on it's child components. For that we can put 
+        canActivate on child components but there is a better approach for that. We have to implement <span>CanActivateChild</span>.
+      </p>
+      <pre>
+        @Injectable()
+        export class AuthGuard implements CanActivate, CanActivateChild {
+          constructor(private authService: AuthService, private router: Router){}
+
+          canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): 
+            Observable&lt;boolean&gt; | Promise&lt;boolean&gt; | boolean {
+            ........
+          }
+
+          CanActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): 
+            Observable&lt;boolean&gt; | Promise&lt;boolean&gt; | boolean {
+            return this.canActivate(route, state);
+          }
+        }
+      </pre>
+      <p>Now apply this on student component route.</p>
+      <pre>
+        const appRoutes : Route = [
+          .......
+          { path: 'students', CanActivateChild: [AuthGuard],  component: StudentComponent, children: [
+            { path: ':id', component: StudentDetailsComponent},
+            { path: ':id/edit', component: EditStudentComponent}
+          ]}
+        ]
+      </pre>
+      <p>Now we will control whether a user can leave a route.</p>
+      <p>For example, we may ask the user to confirm before leaving the student edit page.</p>
+      <p>In edit-student.component.ts file,</p>
+      <pre>
+        changesSaved = false;
+
+        onUpdateStudent() {
+          .......
+          this.changesSaved = true;
+          this.router.navigate(['../'], {relativeTo: this.route});
+        }
+      </pre>
+      <p>
+        So we check the state of 'changesSaved' and decide whether a user can leave the route or not. To prevent leaving, 
+        we have to execute some logic inside student edit component. But route guard is usually of type service becuase we will
+        provide it in the routing module. So somehow we need to access the code in our edit component and also have a service. Though 
+        it seems to be a complex task, we can handle it as follows,
+      </p>
+      <p>Lets add a service named can-deactivate-guard. Inside can-deactivate-guard.service.ts file,</p>
+      <pre>
+        import { CanDeactivate } from '@angular/router';
+        import { Observable } from 'rxjs/Observable'
+
+        export interface CanComponentDeactivate {
+          canDeactivate: () => Observable&lt;boolean&gt; | Promise&lt;boolean&gt; | boolean;
+        }
+
+        export class canDeactivateGuard implements CanDeactivate&lt;CanComponentDeactivate&gt;{
+          ## This method will be called by Angular whenever user try to leave the route.
+          canDeactivate(component: CanComponentDeactivate, 
+                        currentroute: ActivatedRouteSnapshot, 
+                        currentstate: RouterStateSnapshot,
+                        nextState?: RouterStateSnapshot):       ## '?' means optional parameter.
+                        Observable&lt;boolean&gt; | Promise&lt;boolean&gt; | boolean {
+            return component.canDeactivate();
+          }
+        }
+      </pre>
+      <p>Now inside app-routing module,</p>
+      <pre>
+        const appRoutes : Route = [
+          .......
+          { path: 'students', component: StudentComponent, children: [
+            { path: ':id', component: StudentDetailsComponent},
+            { path: ':id/edit', component: EditStudentComponent, canDeactivate: [canDeactivateGuard]}
+          ]}
+        ]
+      </pre>
+      <p>Now we have to implement CanComponentDeactivate in student edit component.</p>
+      <pre>
+        export class EditStudentComponent implements Oninit, CanComponentDeactivate {
+          ........
+          canDeactivate() : Observable&lt;boolean&gt; | Promise&lt;boolean&gt; | boolean {
+            if ( !this.changesSaved ) {
+              return confirm("Do you want to leave?");
+            } else {
+              return true;
+            }
+          }
+        }
+      </pre>
+      <p>
+        We can also pass static data with route without using query params or some other means. For example we may have a 
+        generic error component and wwe want to pass error message with the route. We can do that as follows,
+      </p>
+      <p>In app-routing.module.ts file,</p>
+      <pre>
+        const appRoutes : Route = [
+          .......
+          { path: 'not-found', component: ErrorComponent, data: {message: 'Page Not Found'}},
+          { path: '**', redirectTo: '/not-found'}  
+        ]
+      </pre>
+      <p>In error.component.ts file,</p>
+      <pre>
+        errorMessage: string;
+
+        constructor(private route: ActivatedRoute){}
+
+        ngOnInit() {
+          this.route.data.subscribe(
+            (data: Data) => {
+              this.errorMessage = data['message'];
+            }
+          );
+        }
+      </pre>
+      <p>
+        Lets see how we can also pass dynamic data with a route. For example, inside student details component, we may want to
+        show dynamic data (may be loaded from server) for individual student. Yes, we can do that inside the ngOninit function
+        but we can also do the same before loading the route. For that we need a resolver (a service) which will allow us to run some code
+        before the route is rendered. 
+      </p>
+      <p>In student-resolver.service.ts file,</p>
+      <pre>
+        import { Resolve } from '@angular/router';
+
+        interface Student {
+          id: number;
+          name: string;
+        }
+
+        export class StudentResolver implements Resolve&lt;Student&gt; {
+          resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): 
+                  Observable&lt;Student&gt; | Promise&lt;Student&gt; | Student {
+            return this.someservice.getStudent(+route.params['id'])   ## for refernce, see previous example codes.
+          } 
+        }
+      </pre>
+      <p>In app-routing.module.ts file,</p>
+      <pre>
+        const appRoutes : Route = [
+          .......
+          { path: 'students', component: StudentComponent, children: [
+            { path: ':id', component: StudentDetailsComponent, resolve: {sr: StudentResolver}},
+            .....
+          ]}
+        ]
+      </pre>
+      <p>In student-details.component.ts file,</p>
+      <pre>
+        student: {id:number, name:string};
+
+        ngOninit() {
+          this.route.data.subscribe(
+            (data: Data) => {
+              this.student = data['sr'];
+            }
+          );
+        }
+      </pre>
+      <p>
+        Now here's one important thing, so far the way we have used routes works fine here on our local setup but actually, 
+        If we have a route like this and we are hosting this on a real server somewhere, this might not work out of the box.
+        Because there, routes, the URL is always parsed & handled by the server which hosts our application. The server 
+        hosting our Angular single page application has to be configured such that in a case of a 404 error, it returns the 
+        index.html file, the file starting and containing our Angular app. As all our URLs are parsed by the server first 
+        (not by Angular), now if we have /students there, it will look for a /students route on our server. Now chances are 
+        we don't have that route here because we only have one file there, index.html containing our Angular app and we want 
+        Angular to take over and parse this route but it will never get a chance. Rather our hosting server will show 404 page. 
+        Therefore we need to make sure that in such a case, our web server returns the index.html file. (More in deploy section)
+      </p>
+    </div>
+    </section>
+    <section>
       <h2></h2>
       <p></p>
       <pre></pre>
