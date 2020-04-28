@@ -842,7 +842,11 @@
         export class AppRoutingModule {
         }
       </pre>
-      <p>Now we simply add AppRoutingModule in the imports array of app module.</p>
+      <p>
+        Now we simply add AppRoutingModule in the imports array of app module. Note that, ordering is important while working with dynamic route. 
+        Lets say, we want to add url 'students/new'. If we add this 'new' path after ':id' path in the children array, Angular will think 'new' as 
+        a param. So fixed url patterns must be declared before dynamic patterns.
+      </p>
       <p>
         Lets discuss about route guards: functionallity, logic, code which is executed when a route is loaded or when we leave a route. 
         We may want to prevent a user from accessing certain routes. We can write code inside ngOnInit of each component but that is totally
@@ -1079,9 +1083,120 @@
         (not by Angular), now if we have /students there, it will look for a /students route on our server. Now chances are 
         we don't have that route here because we only have one file there, index.html containing our Angular app and we want 
         Angular to take over and parse this route but it will never get a chance. Rather our hosting server will show 404 page. 
-        Therefore we need to make sure that in such a case, our web server returns the index.html file. (More in deploy section)
+        Therefore we need to make sure that in such a case, our web server returns the index.html file. (More in deploy section)   
       </p>
     </div>
+    </section>
+    <section>
+      <h2>Observable</h2>
+      <p>
+        It can be data sources, user input events, http requests or something triggered in the code. Between observer & observable 
+        there is a stream where observable emits data. An observer (more likely the codes we write) usually handle three types of things: 
+        data, error & completion of observable. 
+      </p>
+      <p>Observables are constructs in which we subscribe to be informed about changes in data.</p>
+      <p>For example, we have used params observable in routing section.</p>
+      <p>Lets build our own observable and understand it's internals.</p>
+      <p>Observable is provided by a package called <span>rxjs</span>. It gives us different ways to create an observable.</p>
+      <pre>
+        import { interval } from 'rxjs';
+
+        ngOnInit() {
+          interval(1000).subscribe( count => {
+            console.log(count);
+          });
+        }
+      </pre>
+      <p>Here 'interval' is an observable provided by rxjs which will emit incremental number every 'n' seconds defined by us.</p>
+      <p>
+        Here if we go to some other component, we see that the interval observable do not stop emitting data. That's because 
+        observable doesnot necessarily stop just because we are not interested any more. There are certain observables that emit some 
+        values and then they are done, i.e http observables, but some observables may continue emitting data. To stop that we have to
+        unsubscribe the observable.
+      </p>
+      <pre>
+        import { interval, Subscription } from 'rxjs';
+
+        private obsSubs: Subscription;
+
+        ngOnInit() {
+          this.obsSubs = interval(1000).subscribe( count => {
+            console.log(count);
+          });
+        }
+
+        ngOnDestroy() {
+          this.obsSubs.unsubscribe();
+        }
+      </pre>
+      <p>So far we have only implemented an observable provided by rxjs. Now we will rebuild this interval observable by ourself.</p>
+      <pre>
+        import { Observable, Subscription } from 'rxjs';
+
+        private obsSubs: Subscription;
+
+        ngOnInit() {
+          const customIntervalObservable = Observable.create(observer => {
+            let count = 0;
+            setInterval(()=>{
+              observer.next(count);
+              count++;
+            },1000);
+          })
+          this.obsSubs = customIntervalObservable.subscribe( data => {
+            console.log(data);
+          });
+        }
+
+        ngOnDestroy() {
+          this.obsSubs.unsubscribe();
+        }
+      </pre>
+      <p>So we have built an observable that emits data. Lets see how we can throw error and other staffs.</p>
+      <pre>
+        ..............
+        const customIntervalObservable = Observable.create(observer => {
+          let count = 0;
+          setInterval(()=>{
+            observer.next(count);
+            if (count > 10) {
+              observer.error(new Error("Greater than 10!"));
+            }
+            count++;
+          },1000);
+        })
+
+        this.obsSubs = customIntervalObservable.subscribe( data => {
+          console.log(data);
+        }, error => {
+          console.log(error.message);
+        });
+      </pre>
+      <p>To complete an observable,</p>
+      <pre>
+        ......
+        const customIntervalObservable = Observable.create(observer => {
+          let count = 0;
+          setInterval(()=>{
+            observer.next(count);
+            if (count == 5) {
+              observer.complete();
+            }
+            count++;
+          },1000);
+        })
+
+        this.obsSubs = customIntervalObservable.subscribe( data => {
+          console.log(data);
+        }, () => {
+          console.log("Completed");
+        });
+      </pre>
+      <p>
+        In general observable emits data and an observer subsribes to that observable. Now we may want to filter or transform the 
+        raw data provided by observable and for that we put <span>operators</span> between observable and observer.
+      </p>
+      </div>
     </section>
     <section>
       <h2></h2>

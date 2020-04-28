@@ -35,12 +35,17 @@ pre {
     font-size: 13px;
 }
 @media (max-width:992px){
+    main {
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+    }
     pre {
         overflow-x: scroll;
     }
 }
 p {
     margin: .2rem;
+    text-align: justify;
 }
 span {
     color: blue;
