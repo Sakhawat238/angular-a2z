@@ -1194,8 +1194,48 @@
       </pre>
       <p>
         In general observable emits data and an observer subsribes to that observable. Now we may want to filter or transform the 
-        raw data provided by observable and for that we put <span>operators</span> between observable and observer.
+        raw data provided by observable and for that we put <span>operators</span> between observable and observer. Then we subscribe 
+        to the result of the operators. Rxjs has lots of operators that we can use in our code.
       </p>
+      <pre>
+        import { map } from 'rxjs/operators';
+
+        ......
+        this.obsSubs = customIntervalObservable.pipe(map(data => {
+          return 'Round: ' + (data+1);
+        })).subscribe( data => {
+          console.log(data);
+        }, () => {
+          console.log("Completed");
+        });
+      </pre>
+      <p>Using pipe we can add mutltiple operators (comma seperated) in the observable.</p>
+      <pre>
+        import { filter, map } from 'rxjs/operators';
+
+        ......
+        this.obsSubs = customIntervalObservable.pipe(filter(data => {
+          return data%2==0;     ## First this operator will run which only allow even number.
+        }), map(data => {
+          return 'Round: ' + (data+1);  ## Then this operator will run on filtered data.
+        })).subscribe( .... );
+      </pre>
+      <p>We have seen in service section that we can establish communication between cross-components by creating event emitter in the service, 
+        then emit it inside one component and subscribe to other component. Instead of EventEmitter, we can use <span>Subject</span>, a special
+        observable provided by rxjs. Instead of calling emit(), we will now call next() method. The remaining procedure is same as before. Also we 
+        have to unsubscribe when the component is destroyed. Using subject is more efficient than EventEmiiter for cross component communication 
+        (not suitable for internal events i.e parent child communication) and we can also use operators with it.
+      </p>
+      </div>
+    </section>
+    <section>
+      <h2>Forms</h2>
+      <p>Angular provides a javascript object representation of the form so that we can perform validation and send it to server.</p>
+      <p>Two types: Template driven form & Reactive form.</p>
+      <p>Template driven: Angular infers the form object from the dom.</p>
+      <p>Reactive: Form is created programmatically and synchronized with the dom.</p>
+      <p></p>
+      <pre></pre>
       </div>
     </section>
     <section>
