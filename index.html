@@ -48,7 +48,6 @@
       </pre>
       <p>In 'app.component.ts' file we define component selector tag.</p>
       <p>Angular serves 'index.html' file which contains app component tag.</p>
-      </div>
     </section>
     <section>
       <h2>Component</h2>
@@ -68,7 +67,6 @@
       <p>1. We declare selector: 'tag-name' and use it as, <span>&lt;tag-name&gt;&lt;/tag-name&gt;</span></p>
       <p>2. We declare selector: '[tag-name]' and use it as attribute, <span>&lt;div tag-name&gt;&lt;/div&gt;</span></p>
       <p>3. We declare selector: '.tag-name' and use it as class, <span>&lt;div class="tag-name"&gt;&lt;/div&gt;</span></p>
-      </div>
     </section>
     <section>
       <h2>String Interpolation</h2>
@@ -77,7 +75,6 @@
       <p>So data can be variable from .ts file, or function or expression.</p>
       <p>But we cannot write multi line expression here.</p>
       <p>We can not use if else block; but we can use ternary expression.</p>
-      </div>
     </section>
     <section>
       <h2>Property Binding</h2>
@@ -93,7 +90,6 @@
         &lt;p&gt;{{title}}&lt;/p&gt;
         &lt;p [innerText]="title"&gt;&lt;/p&gt;
       </pre>
-      </div>
     </section>
     <section>
       <h2>Event Binding</h2>
@@ -102,7 +98,6 @@
         (click)="addNewUser()"
         (input)="updateUsername($event)"  ## Here $event refers to the value that input event emits
       </pre>
-      </div>
     </section>
     <section>
       <h2>Two way Binding</h2>
@@ -112,7 +107,6 @@
         &lt;input type="text" [(ngModel)]="username"&gt;  ## In .html file
       </pre>
       <p>Now if input changes, value of username will change too. Also if value of username changes, value of input field will change too.</p>
-      </div>
     </section>
     <section>
       <h2>Directive</h2>
@@ -125,7 +119,6 @@
       <p>For example, <span>*ngIf</span> is a structural directive that changes the structure of the dom.</p>
       <p><span>ngStyle</span>, <span>ngClass</span> are attribute directives, without a * before. They just modify element.</p>
       <p>Some directive take static value like true or false whereas some take js object.</p>
-      </div>
     </section>
     <section>
       <h2>ngStyle</h2>
@@ -136,7 +129,6 @@
       <p>So it works like a attribute, thus we can use property binding on it.</p>
       <p>It allows us to dynamically add or remove css styles.</p>
       <p>It takes an object; key value pair, where key is a css property, value can be anything.</p>
-      </div>
     </section>
     <section>
       <h2>ngClass</h2>
@@ -146,7 +138,6 @@
       <p>So it works like a attribute, thus we can use property binding on it.</p>
       <p>It allows us to dynamically add or remove css class.</p>
       <p>It takes an object; key value pair, where key is a class name, value can be anything that returns true or false.</p>
-      </div>
     </section>
     <section>
       <h2>If Else</h2>
@@ -156,14 +147,12 @@
           &lt;p&gt;You are invisible&lt;/p&gt;
         &lt;/ng-template&gt;
       </pre>
-      </div>
     </section>
     <section>
       <h2>For Loop</h2>
       <pre>
         &lt;p *ngFor="let item of items, let i = index"&gt;{{i}}. Hi {{item}}&lt;/p&gt;
       </pre>
-      </div>
     </section>
     <section>
       <h2>Switch Case</h2>
@@ -175,7 +164,6 @@
           &lt;p *ngSwitchDefault&gt;Value is default&lt;/p&gt;
         &lt;/div&gt;
       </pre>
-      </div>
     </section>
     <section>
       <h2>Passing data to child component</h2>
@@ -201,7 +189,6 @@
       <pre>
         @Input("alias name"), then in parent html file ["alias name"]="data".
       </pre>
-      </div>
     </section>
     <section>
       <h2>Listening event from child component</h2>
@@ -234,7 +221,6 @@
       <pre>
         @Output("alias name"), then in parent html file ("alias name")="data".
       </pre>
-      </div>
     </section>
     <section>
       <h2>Style Encapsulation</h2>
@@ -253,7 +239,6 @@
           encapsulation: ViewEncasulation.Emulated ## Default, encapsulation enabled.
         })
       </pre>
-      </div>
     </section>
     <section>
       <h2>Template Reference</h2>
@@ -294,7 +279,6 @@
         (but anywhere else in our component), we will set static: false instead! This is a temporary adjustment which will not be 
         required anymore once Angular 9 is released!
       </p>
-      </div>
     </section>
     <section>
       <h2>Html Code Inject</h2>
@@ -323,7 +307,6 @@
       <pre>
         @ContentChild('demo',{static:true/false}) demoref: ElementRef
       </pre>
-      </div>
     </section>
     <section>
       <h2>Component Lifecycle</h2>
@@ -346,7 +329,6 @@
       </p>
       <p><span>ngAfterViewChecked</span>: called every time the component's view (and child views) has been checked.</p>
       <p><span>ngOnDestroy</span>: called once the component is about to destroy.</p>
-      </div>
     </section>
     <section>
       <h2>Directive Advanced</h2>
@@ -462,7 +444,6 @@
         &lt;div *appunless=""&gt;....&lt;/div&gt;
       </pre>
       <p>Shortcut for creating directive: <span>ng g d 'name'</span></p>
-      </div>
     </section>
     <section>
       <h2>Service</h2>
@@ -538,7 +519,6 @@
         The "new syntax" does offer one advantage though: Services can be loaded lazily by Angular (behind the scenes) 
         and redundant code can be removed automatically.
       </p>
-    </div>
     </section>
     <section>
       <h2>Routing</h2>
@@ -1085,7 +1065,6 @@
         Angular to take over and parse this route but it will never get a chance. Rather our hosting server will show 404 page. 
         Therefore we need to make sure that in such a case, our web server returns the index.html file. (More in deploy section)   
       </p>
-    </div>
     </section>
     <section>
       <h2>Observable</h2>
@@ -1220,13 +1199,13 @@
           return 'Round: ' + (data+1);  ## Then this operator will run on filtered data.
         })).subscribe( .... );
       </pre>
-      <p>We have seen in service section that we can establish communication between cross-components by creating event emitter in the service, 
+      <p>
+        We have seen in service section that we can establish communication between cross-components by creating event emitter in the service, 
         then emit it inside one component and subscribe to other component. Instead of EventEmitter, we can use <span>Subject</span>, a special
         observable provided by rxjs. Instead of calling emit(), we will now call next() method. The remaining procedure is same as before. Also we 
         have to unsubscribe when the component is destroyed. Using subject is more efficient than EventEmiiter for cross component communication 
         (not suitable for internal events i.e parent child communication) and we can also use operators with it.
       </p>
-      </div>
     </section>
     <section>
       <h2>Forms</h2>
@@ -1234,15 +1213,424 @@
       <p>Two types: Template driven form & Reactive form.</p>
       <p>Template driven: Angular infers the form object from the dom.</p>
       <p>Reactive: Form is created programmatically and synchronized with the dom.</p>
-      <p></p>
-      <pre></pre>
-      </div>
-    </section>
+      <p>
+        Lets understand how Angular creates javascript representation of a form in template dirven approach. First of all, we have to import FormsModule 
+        inside app.module.ts file.</p>
+      <p>
+        Suppose we have some input fields inside the form tag in our html file. By default, Angular wont detect input fields automatically. We have to add 
+        <span>ngModel</span> directive in the input field and provide it a name (html attribute), which wil be used to represent it in javascript object. Now 
+        how can we handle form submission and retrieve the javascript representation? Lets say, we have a method onSubmit() inside our .ts file. We can 
+        call this method when user click the submit button, but the default behavior of submit button will also trigger a http call. So a better approach is,
+      </p>
+      <pre>
+        &lt;form (ngSubmit)="onSubmit(myform)" #myform&gt;
+        .......
+        &lt;/form&gt;
+      </pre>
+      <p>
+        Here ngSubmit will capture the default event fired by submit button and call onSubmit() method. We have passed a reference of this form 
+        as a parameter to use it inside our .ts file. We can also use ViewChild decorator instead of passing the ref as a parameter. In that way 
+        we can use the form before user submit it.
+      </p>
+      <pre>
+        onSubmit(form: HTMLInputElement) {
+          console.log(form);   ## Will show a html representation of the form
+        }
+      </pre>
+      <p>To get the javascript representation we have to do one more thing. We update the form reference as,</p>
+      <pre>
+        &lt;form (ngSubmit)="onSubmit(myform)" #myform="ngForm"&gt;
+        .......
+        &lt;/form&gt;
+
+        onSubmit(form: NgForm) {
+          console.log(form);   ## Will show a NgForm object.
+        }
+      </pre>
+      <p>
+        This NgForm object has a value property which is an object conatining our input elements & their values. NgForm also conatins lots of 
+        properties i.e valid, invalid, dirty, touched, disabled etc. that can be useful to validate the form.
+      </p>
+      <p>
+        Lets see how we can validate our form. As we are using template driven approach, our validation will be done inside the html file. 
+        For example, we can add 'required' in the nput field. Though it is a html attribute, Angular will detect it and treat it as a selector 
+        for a built-in directive available in Angular. We can also use Angular provided directive such as 'email' directive to make sure an input 
+        field has valid email address. If any of the requirements of these directive is not met, Angular will treat the form as invalid. 
+      </p>
+      <p>Suppose we have the following codes inside the html file,</p>
+      <pre>
+        &lt;input type="email" id="email_addr" ngModel name="email_addr" required email /&gt;
+      </pre>
+      <p>If we look at the html code generated by Angular, we will see that Angular add some extra classes such as,</p>
+      <pre>
+        &lt;input class="ng-dirty ng-untouched ng-invalid" type="email" id="email_addr" 
+            name="email_addr" ngmodel  required ng-reflect-name="email" /&gt;
+      </pre>
+      <p>
+        Now based on whether user touched the input field or not, whether input field is valid or not, these classes will change. With that 
+        information we can style the input field conditionally.
+      </p>
+      <p>
+        For example, we can disable the submit button if form is invalid.
+      </p>
+      <pre>
+        &lt;form (ngSubmit)="onSubmit()" #myform="ngForm"&gt;
+        .......
+          &lt;button type="submit" [disabled]="!myform.valid"&gt;Submit&lt;/button&gt;
+        &lt;/form&gt;
+      </pre>
+      <p>Also we can use these css classes provided by Angular and write our own styles. Inside css file,</p>
+      <pre>
+        input.ng-invalid.ng-touched {
+          border: 1px solid red;
+        }
+      </pre>
+      <p>Lets add a helper text if user gives invalid email address.</p>
+      <pre>
+        &lt;input type="email" id="email_addr" ngModel name="email_addr" required email #emailRef="ngModel"/&gt;
+        &lt;span *ngIf="!emailRef.valid && emailRef.touched"&gt;Please enter valid email address&lt;/span&gt;
+      </pre>
+      <p>We can provide default value to our input field via property binding,</p>
+      <pre>
+        &lt;input type="email" id="email_addr" 
+            [ngModel]="you@example.com" 
+            name="email_addr" required email #emailRef="ngModel"/&gt;
+      </pre>
+      <p>
+        Note that we have also seen how we can apply two way binding between ngModel and a variable from ts file so that 
+        we can react to every input changes.
+      </p>
+      <p>Suppose we have the following form,</p>
+      <pre>
+        &lt;form (ngSubmit)="onSubmit()" #myform="ngForm"&gt;
+          &lt;div&gt;
+            &lt;label&gt;Username&lt;/label&gt;
+            &lt;input type="text" id="username" ngModel name="username" required/&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;label&gt;Email&lt;/label&gt;
+            &lt;input type="email" id="email_addr" ngModel name="email_addr" required email/&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;label&gt;Select Role&lt;/label&gt;
+            &lt;select id="role_select" ngModel name="role_select" required&gt;
+              &lt;option value="s"&gt;Student&lt;/option&gt;
+              &lt;option value="t"&gt;Teacher&lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/div&gt;
+          &lt;button type="submit" [disabled]="!myform.valid"&gt;Submit&lt;/button&gt;
+        &lt;/form&gt;
+      </pre>
+      <p>If we fillup the form and hit submit button, Angular will provide us the following javascript object,</p>
+      <pre>
+        NgForm: {
+          ......
+          control: {
+            username: FormControl,
+            email_addr: FormControl,
+            role_select: FormControl
+          }
+          ......
+          value: {
+            username: "abcd",
+            email_addr: "test@example.com",
+            role_select: "s"
+          }
+        }
+      </pre>
+      <p>
+        Lets say, we want to group two or more input fields so that we can perform group validation or something else. We can 
+        do this as follows,
+      </p>
+      <pre>
+        &lt;form (ngSubmit)="onSubmit()" #myform="ngForm"&gt;
+          &lt;div ngModelGroup="userdata" #uegroup="ngModelGroup"&gt;
+            &lt;div&gt;
+              &lt;label&gt;Username&lt;/label&gt;
+              &lt;input type="text" id="username" ngModel name="username" required/&gt;
+            &lt;/div&gt;
+            &lt;div&gt;
+              &lt;label&gt;Email&lt;/label&gt;
+              &lt;input type="email" id="email_addr" ngModel name="email_addr" required email/&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;label&gt;Select Role&lt;/label&gt;
+            &lt;select id="role_select" ngModel name="role_select" required&gt;
+              &lt;option value="s"&gt;Student&lt;/option&gt;
+              &lt;option value="t"&gt;Teacher&lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/div&gt;
+          &lt;button type="submit" [disabled]="!myform.valid"&gt;Submit&lt;/button&gt;
+        &lt;/form&gt;
+      </pre>
+      <p>Now we will get the following js representation,</p>
+      <pre>
+        NgForm: {
+          ......
+          control: {
+            userdata: FormGroup,
+            role_select: FormControl
+          }
+          ......
+          value: {
+            userdata: {
+              username: "abcd",
+              email_addr: "test@example.com"
+            },
+            role_select: "s"
+          }
+        }
+      </pre>
+      <p>Let see how we can provide values to some input fields inside a form if user click a button or call a function.</p>
+      <pre>
+        @ViewChild('myform') myform: NgForm;
+        onButtonClick () {
+          this.myform.setValue({
+            userdata: {
+              username: "abcd",
+              email_addr: ""
+            },
+            role_select: "s"
+          })
+        }
+      </pre>
+      <p>
+        The drawback of this setValue() method is that we have to provide values for all input fields and thus it will replace any 
+        existing values in the input fields that we do not want to set values. A better approach would be,
+      </p>
+      <pre>
+        @ViewChild('myform') myform: NgForm;
+        onButtonClick () {
+          this.myform.form.patchValue({
+            userdata: {
+              username: "abcd"
+            }
+          })
+        }
+      </pre>
+      <p>
+        We can reset a form using setValue() method, though it will only reset values. We can use this to reset to some specific values. 
+        To completely reset the form, it's values and properties, we can do the following.
+      </p>
+      <pre>
+        this.myform.reset();
+      </pre>
+      <p>Now we will see the reactive form approach.</p>
+      <p>First of all, we have to add ReactiveFormsModule instead of FormsModule.</p>
+      <p>Inside ts file,</p>
+      <pre>
+        signupForm: FormGroup;
+
+        ngOnInit () {
+          this.signupForm = new FormGroup ({
+            'username': new FormControl(initialvalue, single or array of validators, async validators),
+            'email': new FormControl(null),
+            'role': new FormControl('s')
+          })
+        }
+      </pre>
+      <p>Inside html file,</p>
+      <pre>
+        &lt;form [formGroup]="signupForm" (ngSubmit)="onSubmit()"&gt;
+          &lt;div&gt;
+            &lt;label&gt;Username&lt;/label&gt;
+            &lt;input type="text" id="username" formControlName="username"&gt;  ## [formControlName]="'username'"
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;label&gt;Email&lt;/label&gt;
+            &lt;input type="email" id="email_addr" formControlName="email"&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;label&gt;Select Role&lt;/label&gt;
+            &lt;select id="role_select" formControlName="role"&gt;
+              &lt;option value="s"&gt;Student&lt;/option&gt;
+              &lt;option value="t"&gt;Teacher&lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/div&gt;
+          &lt;button type="submit"&gt;Submit&lt;/button&gt;
+        &lt;/form&gt;
+      </pre>
+      <p>
+        Here we have used ngSubmit just like template driven approach. But the main difference is, we no longer need to add 
+        a form reference and pass it as an argument, because we have already declared the form in our ts file.
+      </p>
+      <pre>
+        onSubmit () {
+          console.log(this.signupForm);
+        }
+      </pre>
+      <p>
+        Low lets add some validation to this form. Previously we handled the validation in the template, but here everything will 
+        be done inside the ts file. For example we can add required validation like this,
+      </p>
+      <pre>
+        ngOnInit () {
+          this.signupForm = new FormGroup ({
+            'username': new FormControl(null, Validators.required),
+            'email': new FormControl(null, [Validators.required, Validators.email]),
+            'role': new FormControl('s')
+          })
+        }
+      </pre>
+      <p>
+        Lets say we want to dispaly a message below the username input field if username is incorrect. In template driven approach 
+        we would use the reference of ngModel to conditionally show the message. In reactive approach, we no longer use ngModel. But 
+        we can use our overall form as a reference.
+      </p>
+      <pre>
+        &lt;input type="text" id="username" formControlName="username"&gt;
+        &lt;span *ngIf="signupForm.get('username').valid && signupForm.get('username').touched"&gt;
+          Please enter valid username
+        &lt;/span&gt;
+      </pre>
+      <p>We can also disable the submit button,</p>
+      <pre>
+        &lt;button type="submit" [disabled]="!signupForm.valid"&gt;Submit&lt;/button&gt;
+      </pre>
+      <p>
+        Note that, just like template driven approach, Angular add ng-dirty, ng-touch etc classes in reactive approach too. So we can 
+        use them to style just like before.
+      </p>
+      <p>Lets see how we can group our input elements here.</p>
+      <pre>
+        ngOnInit () {
+          this.signupForm = new FormGroup ({
+            'userdata': new FormGroup({
+              'username': new FormControl(null, Validators.required),
+              'email': new FormControl(null, [Validators.required, Validators.email])
+            }),
+            'role': new FormControl('s')
+          })
+        }
+      </pre>
+      <p>Then we have to update our template like this,</p>
+      <pre>
+        &lt;form [formGroup]="signupForm" (ngSubmit)="onSubmit()"&gt;
+          &lt;div formGroupName="userdata"&gt;
+            &lt;div&gt;
+              &lt;label&gt;Username&lt;/label&gt;
+              &lt;input type="text" id="username" formControlName="username"&gt;  ## [formControlName]="'username'"
+            &lt;/div&gt;
+            &lt;div&gt;
+              &lt;label&gt;Email&lt;/label&gt;
+              &lt;input type="email" id="email_addr" formControlName="email"&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;label&gt;Select Role&lt;/label&gt;
+            &lt;select id="role_select" formControlName="role"&gt;
+              &lt;option value="s"&gt;Student&lt;/option&gt;
+              &lt;option value="t"&gt;Teacher&lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/div&gt;
+          &lt;button type="submit"&gt;Submit&lt;/button&gt;
+        &lt;/form&gt;
+      </pre>
+      <p>
+        As username input field is now nested inside userdata formgroup, the warning message wont work anymore. We have to
+        correct the path,
+      </p>
+      <pre>
+        &lt;span *ngIf="signupForm.get('userdata.username').valid && signupForm.get('userdata.username').touched"&gt;
+          Please enter valid username
+        &lt;/span&gt;
+      </pre>
+      <p>Lets see how we can dynamically add input fields in our form when user clicks a button.</p>
+      <pre>
+        ngOnInit () {
+          this.signupForm = new FormGroup ({
+            .......
+            'subjects': new FormArray([])
+          })
+        }
+
+        onSubjectAdd () {
+          var control = new FormControl(null, Validators.required);
+          (&lt;FormArray&gt;this.signupForm.get('subjects')).push(control);
+          ## Here type casting is mendatory.
+        }
+      </pre>
+      <p>In html file,</p>
+      <pre>
+        &lt;div formArrayName="subjects"&gt;
+          &lt;button type="button" (click)="onSubjectAdd()"&gt;Add Subject&lt;/button&gt;
+          &lt;div *ngFor="let subjectControl of signupForm.get("subjects").controls, let i = index"&gt;
+            &lt;input type="text" [formControlName]="i"&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      </pre>
+      <p>Lets see how we can create custom validator.</p>
+      <pre>
+        forbiddenNames = ['Admin', 'Boss'];
+
+        forbiddenNameCheck (control: FormControl) : {[s:string]: boolean} {
+          if (this.forbiddenNames.indexOf(control.value) != -1) {
+            return {'namIsForbidden'}: true;
+          }
+          return null;  ## do not return {'namIsForbidden'}: false; It doesn't work like this.
+        }
+
+        ngOnInit () {
+          this.signupForm = new FormGroup ({
+            'userdata': new FormGroup({
+              'username': new FormControl(null, [Validators.required, this.forbiddenNameCheck.bind(this)]),
+              ## Here bind is necessary because when Angular calls the function, 'this' doesnot refer to this class.
+            }),
+            .....
+          })
+        }
+      </pre>
+      <p>Now we can use the error messages to show different messages in the html.</p>
+      <pre>
+        &lt;span *ngIf="signupForm.get('userdata.username').valid && signupForm.get('userdata.username').touched"&gt;
+          &lt;span *ngIf="signupForm.get('userdata.username').errors['nameIsForbiden']"&gt;
+            Please enter a valid username.
+          &lt;/span&gt;
+          &lt;span *ngIf="signupForm.get('userdata.username').errors['required']"&gt;
+           Username is required.
+          &lt;/span&gt;
+        &lt;/span&gt;
+      </pre>
+      <p>
+        Sometimes we may need to communicate with the server to perform validation. In that case we will need async validator.
+      </p>
+      <pre>
+        forbiddenEmailsCheck (control: FormControl) : Promise&lt;any&gt; | Observable&lt;any&gt; {
+          const promise = new Promise&lt;any&gt;((resolve, reject) => {
+            ## mimicking a server call
+            setTimeout(()=>{
+              if (control.value == 'abc@xyz.com') {
+                resolve({'emailIsForbidden': true});
+              } else {
+                resolve(null);
+              }
+            }, 2000);
+          });
+        }
+
+        ngOnInit () {
+          this.signupForm = new FormGroup ({
+            'userdata': new FormGroup({
+              .......
+              'email': new FormControl(null, [Validators.required, Validators.email], this.forbiddenEmailsCheck)
+            }),
+            ......
+          })
+        }
+      </pre>
+      <p>
+        Our signupForm also gives us two obeservables: valueChanges & statusChanges. We can subscribe to these observables and 
+        closely monitor our forms and react with every input changes.
+      </p>
+      <p>
+        Like template driven approach, we can use setValue, patchValue and reset method exactly same way.
+      </p>
+    </section> 
     <section>
       <h2></h2>
       <p></p>
       <pre></pre>
-      </div>
     </section>
   </main>
 </body>
