@@ -1628,6 +1628,293 @@
       </p>
     </section> 
     <section>
+      <h2>Pipes</h2>
+      <p>Pipes are features which allow us to transform output in the html file.</p>
+      <p>Lots of built-in pipes are available which we can use in our template.</p>
+      <pre>
+        &lt;p&gt;{{username | uppercase}}&lt;/p&gt;
+        &lt;p&gt;{{joiningdate | date}}&lt;/p&gt;
+      </pre>
+      <p>We can pass parameter to a pipe to futher customize our output.</p>
+      <pre>
+        &lt;p&gt;{{joiningdate | date:'fullDate'}}&lt;/p&gt;
+        ## pipe:param1:param2 ...etc
+      </pre>
+      <p>We can apply multiple pipes by nesting them togther. Note that they will be applied from left to right.</p>
+      <pre>
+        &lt;p&gt;{{joiningdate | date:'fullDate' | uppercase}}&lt;/p&gt;
+      </pre>
+      <p>Lets make our own pipe which will shorten any given string.</p>
+      <p>Inside shorten.pipe.ts file,</p>
+      <pre>
+        @Pipe({
+          name: 'shorten'
+        })
+        export class ShortenPipe implements PipeTransform {
+          transform(value: any) {
+            return value.substr(0,10);
+          }
+        }
+      </pre>
+      <p>Then we have to add this class in declarations array inside app.module.ts file. Now we can use it like this,</p>
+      <pre>
+        &lt;p&gt;{{username | shorten}}&lt;/p&gt;
+      </pre>
+      <p>Now we will add parameter to this pipe,</p>
+      <pre>
+        @Pipe({
+          name: 'shorten'
+        })
+        export class ShortenPipe implements PipeTransform {
+          transform(value: any, limit: number) {
+            if(value.length > limit) {
+              return value.substr(0,limit);
+            }
+            return value;
+          }
+        }
+
+        ## Inside html file,
+        &lt;p&gt;{{username | shorten:10}}&lt;/p&gt;
+      </pre>
+      <p>
+        Angular rerun pipe whenever it's input parameter changes but it won't rerun it when the variable/array/data/anything on which 
+        we are applying the pipe changes. Angular does that to boost performance. But we can force Angular to calulate pipe everytine
+        by adding following property,
+      </p>
+      <pre>
+        @Pipe({
+          name: 'shorten',
+          pure: false
+        })
+      </pre>
+      <p>
+        There is a built-in pipe called <strong>async</strong> that we can use on data that is currently not available in the dom but will 
+        be availble after some momemnts (may be coming from a server).
+      </p>
+    </section>
+    <section>
+      <h2>Http</h2>
+      <p>First we have to add HttpClientModule in app.module.ts file. Then we have to ineject it into the component where we will use it.</p>
+      <p>In app.component.ts file,</p>
+      <pre>
+        constructor(private http: HttpClient){}
+
+        onCreateUser(data: {name:string, age: number}) {
+          this.http.post(
+            url, 
+            data
+          ).subscribe(responseData => {
+            console.log(responseData);
+          });
+        }
+      </pre>
+      <p>
+        Here, we send data which is a js object but Angular will convert it to json before sending. Http request are managed by
+        observable. So if we are not subscribing to this observable, Angualr won't send any http request. 
+      </p>
+      <p>Lets send a get request to the server.</p>
+      <pre>
+        onFetchUsers() {
+          this.http.get(
+            url
+          ).subscribe(responseData => {
+            console.log(responseData);
+          });
+        }
+      </pre>
+      <p>We can also use filter or transform the responseData using operators.</p>
+      <pre>
+        onFetchUsers() {
+          this.http.get(
+            url
+          ).pipe(map(responseData=>{
+            do something..
+          })).subscribe(convertedData => {
+            console.log(convertedData);
+          });
+        }
+      </pre>
+      <p>Currently responseData is of type any. But we can provide data type following ways,</p>
+      <pre>
+        onFetchUsers() {
+          this.http.get&lt;datatype&gt;(               ## We can provide type here.
+            url
+          ).pipe(map((responseData: datatype)=>{  ## Or, We can provide type here.
+            do something..
+          })).subscribe(convertedData => {
+            console.log(convertedData);
+          });
+        }
+      </pre>
+      <p>
+        In general, our component should only handle functionallities related to templates, thus we should write all http codes 
+        inside a service and use that service in our component. If our component does not need to react to the response data of 
+        an api call, then all associated code will go to the service. But if we need the response data (for example, get call), then 
+        the all codes except subscription part will be inside the service and we will call subscribe inside our component, thus we can 
+        react to newly arrived data.
+      </p>
+      <p>In order to send a delete request,</p>
+      <pre>
+        this.http.delete(url).subscribe(response => {});
+      </pre>
+      <p>Lets see how we can handle errors.</p>
+      <pre>
+        onFetchUsers() {
+          this.http.get(
+            url
+          ).pipe(map(responseData=>{
+            do something..
+          })).subscribe(
+            convertedData => {
+              console.log(convertedData);
+            }, 
+            error => {
+              console.log(error.message, error.status)
+            }
+          );
+        }
+      </pre>
+      <p>
+        The above method will work if subscribe method is inside our component but sometimes we may not need the response data (post call), 
+        thus subscribe method will be inside the service. In that case we can either move that fucntion inside our component and everything will 
+        be fine. But there is another way to handle this situation.
+      </p>
+      <pre>
+        ## Inside the service,
+        error = new Subject&lt;datatype&gt;();
+        onFetchUsers() {
+          ........
+            error => {
+              this.error.next(error.message)
+            }
+          );
+        }
+
+        ## Inside the component,
+        private errorSub: Subscription;
+        constructor(private service: OurService){}
+
+        ngOnInit() {
+          this.errorSub = this.service.error.subscribe(errorMessage => {});
+        }
+
+        ngOnDestroy() {
+          this.errorSub.unsubcribe();
+        }
+      </pre>
+      <p>
+        In some cases we may have some generic error handling task. In that case we can use operator to catch error, perform 
+        some task and after that throw it as an observable.
+      </p>
+      <pre>
+        onFetchUsers() {
+          this.http.get(
+            url
+          ).pipe(
+            map(responseData=>{
+              ....
+            },
+            catchError(errorResponse =>{      ## catchError and throwError are operators.
+              ......
+              return throwError(errorResponse);  ## returns an observable.
+            })
+          )).subscribe(
+            ....
+          );
+        }
+      </pre>
+      <p>We may need to add custom headers with our request. We can do it as follows,</p>
+      <pre>
+        this.http.get(
+          url,
+          {
+            headers: new HttpHeaders({
+              'key': value
+            })
+          }
+        )
+      </pre>
+      <p>Sometimes api may support query params. In that case we can either send params with the url or we can do it as follows,</p>
+      <pre>
+        let searchParams = HttpParams();
+        searchParams = searchParams.append('key1','value1');
+        searchParams = searchParams.append('key2','value2');
+
+        this.http.get(
+          url,
+          {
+            headers: ....,
+            params: searchParams     ## The url will be converted into, url?key1=value1&key2=value2
+          }
+        )
+      </pre>
+      <p>So far the response we get is actually the response body parsed by Angular. But we can also get the full response object.</p>
+      <pre>
+        this.http.get(
+          url,
+          {
+            ....
+            observe: 'response'   ## By default, it is set to 'body'. There is also 'events' that we can use.
+          }
+        )
+      </pre>
+      <p>Similarly, we can also define responseType and set it to 'json', 'text', 'blob' etc.</p>
+      <p>
+        So far whenever we are configuring headers or params etc, we are doing this in every request. Suppose we have to 
+        add same configurtaion in every outgoing request (for example, authentication header). Instead of repeating ourselves 
+        we can use <span>interceptor</span> (a type of service). Inside auth-interceptor.service.ts file,
+      </p>
+      <pre>
+        export class AuthInterceptorService implements HttpInterceptor {
+          ## below method will be run right before the request leaves the application.
+          intercept(req: HttpRequest&lt;any&gt;, next: HttpHandler) {
+            ## req object is immutable. Thus we have to clone it and modify.
+            const modifiedRequest = req.clone({
+              headers: req.headers.append('Auth', '987328-Ade-2321')
+            });
+            return next.handle(modifiedRequest);
+          }
+        }
+      </pre>
+      <p>
+        We have to provide this service in a special way so that Angular will automatically inject the service and run it when a 
+        request leaves the application. In app.module.ts file,
+      </p>
+      <pre>
+        import { HTTP_INTERCEPTORS } from '@angular/common/http';
+        @NgModule({
+          .....
+          providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}]
+        })
+      </pre>
+      <p>We can also interact with the response inside an interceptor.</p>
+      <pre>
+        export class AuthInterceptorService implements HttpInterceptor {
+          intercept(req: HttpRequest&lt;any&gt;, next: HttpHandler) {
+            ........
+            return next.handle(modifiedRequest).pipe(.....);  ## Here response type will always be an event.
+          }
+        }
+      </pre>
+      <p>We can add multiple interceptors and they will be run according to their order inside the providers array.</p>
+      <pre>
+        @NgModule({
+          .....
+          providers: [
+            {provide: HTTP_INTERCEPTORS, useClass: FirstInterceptorService, multi: true},
+            {provide: HTTP_INTERCEPTORS, useClass: SecondInterceptorService, multi: true}
+          ]
+        })
+      </pre>
+    </section>
+    <section>
+      <h2>Authetication & Route Protection</h2>
+      <p></p>
+      <pre></pre>
+    </section>
+
+    <section>
       <h2></h2>
       <p></p>
       <pre></pre>
